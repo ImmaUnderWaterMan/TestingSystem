@@ -9,6 +9,13 @@
 - [Описание](#-описание)
 - [Возможности](#-возможности)
 - [Стек технологий](#-стек-технологий)
+- [Структура проекта](#-структура-проекта)
+- [Структура базы данных](#-структура-базы-данных)
+- [Установка и запуск](#-установка-и-запуск)
+- [Учётные данные](#-учётные-данные)
+- [Использование](#-использование)
+- [Разработка](#-разработка)
+- [Лицензия](#-лицензия)
 
 ---
 
@@ -64,3 +71,70 @@
 
 ---
 
+## 📁 Структура проекта
+TestingSystem/
+├── TestingSystem.sln # Решение Visual Studio
+├── docker-compose.yml # Конфигурация Docker Compose
+├── Dockerfile # Dockerfile для web-приложения
+├── entrypoint.sh # Скрипт инициализации БД
+├── .gitignore
+├── README.md
+│
+├── Database/ # SQL-скрипты для БД
+│ ├── 001_CreateTables.sql # Создание таблиц
+│ └── 002_InsertSeedData.sql # Начальные данные
+│
+└── TestingSystem/ # Основной проект
+├── TestingSystem.csproj
+├── Program.cs # Точка входа
+├── appsettings.json
+├── appsettings.Development.json
+│
+├── Pages/ # Razor Pages
+│ ├── Index.cshtml
+│ ├── Shared/
+│ ├── Admin/
+│ ├── Auth/
+│ └── Student/
+├── Data/ 
+├── Models/ 
+├── Helpers/ 
+└── wwwroot/
+
+---
+## 🗄 Структура базы данных
+
+TestingSystem
+├── Roles # Роли пользователей
+├── Users # Пользователи системы
+├── Disciplines # Дисциплины
+├── UserDisciplines # Связь студентов и дисциплин
+├── Tests # Тесты
+├── Questions # Вопросы тестов
+├── Answers # Варианты ответов
+├── TestResults # Результаты тестов
+└── UserAnswers # Ответы пользователей
+
+---
+
+## 🚀 Установка и запуск
+
+### Требования
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- [Git](https://git-scm.com/)
+- 4 GB+ свободной памяти
+
+### Быстрый старт
+
+1. **Клонируйте репозиторий:**
+   ```bash
+   git clone https://github.com/USERNAME/TestingSystem.git
+   cd TestingSystem
+2. Запуск проекта
+    ```bash
+    docker-compose up --build -d
+3. Проект находится по адресу: http://localhost:8080
+4. Остановка проекта:
+   ```bash
+   docker-compose down
