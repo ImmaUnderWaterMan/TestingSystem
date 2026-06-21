@@ -174,13 +174,13 @@ TestingSystem
 ---
 # 🛠 Разработка
 
-###Запуск без Docker (локально)
+### Запуск без Docker (локально)
 ```bash
    cd TestingSystem
    dotnet restore
    dotnet run
 ```
-###Миграции базы данных
+### Миграции базы данных
 ```bash
 dotnet ef migrations add MigrationName
 dotnet ef database update
