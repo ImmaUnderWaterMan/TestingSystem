@@ -141,6 +141,7 @@ TestingSystem
    ```bash
    docker-compose down
    ```
+---
 ## 🔐 Учётные данные
 
 | Роль | Логин | Пароль |
