@@ -1,0 +1,83 @@
+﻿@page "{id:int}"
+@model TestingSystem.Pages.Admin.Disciplines.StudentsModel
+@{
+    ViewData["Title"] = $"Студенты дисциплины: {Model.Discipline?.Name}";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1>👥 Студенты дисциплины</h1>
+        <h4 class="text-secondary">@Model.Discipline?.Name</h4>
+    </div>
+    <a asp-page="Index" class="btn btn-secondary">← Назад к дисциплинам</a>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-@(Model.MessageType) alert-dismissible fade show">
+        @Model.Message
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>✅ Назначенные студенты (@Model.AssignedStudents.Count())</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.AssignedStudents.Any())
+                {
+                    <table class="table">
+                        <tbody>
+                            @foreach (var student in Model.AssignedStudents)
+                            {
+                                <tr>
+                                    <td>@student.LastName @student.FirstName</td>
+                                    <td class="text-end">
+                                        <form method="post" asp-page-handler="RemoveStudent" class="d-inline">
+                                            <input type="hidden" name="studentId" value="@student.Id" />
+                                            <input type="hidden" name="disciplineId" value="@Model.Discipline.Id" />
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                Убрать
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="text-secondary text-center">Нет назначенных студентов</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>➕ Добавить студентов</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" asp-page-handler="AddStudent">
+                    <input type="hidden" name="disciplineId" value="@Model.Discipline.Id" />
+                    <div class="mb-3">
+                        <label for="studentId" class="form-label">Выберите студента:</label>
+                        <select name="studentId" id="studentId" class="form-select" required>
+                            <option value="">-- Выберите студента --</option>
+                            @foreach (var student in Model.AvailableStudents)
+                            {
+                                <option value="@student.Id">@student.LastName @student.FirstName (@student.Login)</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success">➕ Добавить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+﻿@page "{id:int}"
+@model TestingSystem.Pages.Admin.Disciplines.EditModel
+@{
+    ViewData["Title"] = "Редактирование дисциплины";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1 class="mb-4">✏️ Редактирование дисциплины</h1>
+
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <input type="hidden" asp-for="Input.Id" />
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary">ID дисциплины</label>
+                        <input value="@Model.Input.Id" class="form-control" disabled />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Name" class="form-label"></label>
+                        <input asp-for="Input.Name" class="form-control" />
+                        <span asp-validation-for="Input.Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Description" class="form-label"></label>
+                        <textarea asp-for="Input.Description" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Input.Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.TeacherId" class="form-label"></label>
+                        <select asp-for="Input.TeacherId" class="form-select" asp-items="Model.TeachersSelectList">
+                            <option value="">-- Выберите преподавателя --</option>
+                        </select>
+                        <span asp-validation-for="Input.TeacherId" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">💾 Сохранить</button>
+                        <a asp-page="Index" class="btn btn-secondary">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,137 @@
+﻿@page "{resultId:int}"
+@model TestingSystem.Pages.Student.ResultModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Результат теста";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+            body {
+                background: var(--bg-primary);
+                color: var(--text-primary);
+                padding: 20px;
+                min-height: 100vh;
+            }
+
+            .result-card {
+                background: var(--bg-card);
+                border: 1px solid rgba(233, 69, 96, 0.2);
+                border-radius: 12px;
+                padding: 30px;
+                margin-bottom: 20px;
+            }
+
+            .result-header {
+                text-align: center;
+                padding: 30px;
+                border-radius: 10px;
+                margin-bottom: 30px;
+            }
+
+                .result-header.passed {
+                    background: linear-gradient(135deg, rgba(0, 217, 163, 0.2) 0%, rgba(0, 184, 148, 0.2) 100%);
+                    border: 2px solid var(--success);
+                }
+
+                .result-header.failed {
+                    background: linear-gradient(135deg, rgba(233, 69, 96, 0.2) 0%, rgba(194, 58, 81, 0.2) 100%);
+                    border: 2px solid var(--danger);
+                }
+
+            .percentage {
+                font-size: 72px;
+                font-weight: bold;
+                margin: 20px 0;
+            }
+
+            .question-card {
+                background: var(--bg-secondary);
+                border-radius: 8px;
+                padding: 20px;
+                margin-bottom: 15px;
+            }
+
+            .answer-correct {
+                color: var(--success);
+            }
+
+            .answer-wrong {
+                color: var(--danger);
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="result-header @(Model.Result.IsPassed ? "passed" : "failed")">
+            <h1>@(Model.Result.IsPassed ? "✅ Тест сдан!" : "❌ Тест не сдан")</h1>
+            <div class="percentage @(Model.Result.IsPassed ? "text-success" : "text-danger")">
+                @Model.Result.Percentage%
+            </div>
+            <h3>@Model.Result.TestTitle</h3>
+            <p class="mb-0">
+                Правильных ответов: @Model.Result.Score из @Model.Result.TotalPoints<br />
+                Проходной балл: @Model.Test.PassingScore%
+            </p>
+        </div>
+
+        <div class="result-card">
+            <h4 class="mb-4">📋 Разбор ответов:</h4>
+
+            @foreach (var answer in Model.UserAnswers)
+            {
+                <div class="question-card">
+                    <h6>
+                        @answer.QuestionText
+                        @if (answer.IsCorrect)
+                        {
+                            <span class="badge bg-success ms-2">✅ Правильно</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger ms-2">❌ Неправильно</span>
+                        }
+                    </h6>
+
+                    @if (!string.IsNullOrEmpty(answer.SelectedAnswerText))
+                    {
+                        <p class="mb-1">
+                            <strong>Ваш ответ:</strong>
+                            <span class="@(answer.IsCorrect ? "answer-correct" : "answer-wrong")">
+                                @answer.SelectedAnswerText
+                            </span>
+                        </p>
+                    }
+
+                    @if (!string.IsNullOrEmpty(answer.TextAnswer))
+                    {
+                        <p class="mb-1">
+                            <strong>Ваш ответ:</strong>
+                            <span class="text-info">@answer.TextAnswer</span>
+                        </p>
+                        <p class="text-secondary small mb-0">
+                            <em>Текстовый ответ требует проверки преподавателем</em>
+                        </p>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="text-center mt-4">
+            <a asp-page="Tests" asp-route-disciplineId="@Model.Test.DisciplineId" class="btn btn-primary btn-lg me-2">
+                📚 К другим тестам
+            </a>
+            <a asp-page="Index" class="btn btn-secondary btn-lg">
+                🏠 На главную
+            </a>
+        </div>
+    </div>
+</body>
+</html>

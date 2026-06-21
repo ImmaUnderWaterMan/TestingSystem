@@ -1,0 +1,52 @@
+﻿@page
+@model TestingSystem.Pages.Student.IndexModel
+@{
+    ViewData["Title"] = "Мои дисциплины";
+}
+
+<h1 class="mb-4">📚 Мои дисциплины</h1>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-@(Model.MessageType) alert-dismissible fade show">
+        @Model.Message
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (Model.Disciplines.Any())
+{
+    <div class="row">
+        @foreach (var discipline in Model.Disciplines)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="dashboard-card h-100">
+                    <h4>@discipline.Name</h4>
+                    <p class="text-secondary">
+                        @if (!string.IsNullOrEmpty(discipline.TeacherName))
+                        {
+                            <small>Преподаватель: @discipline.TeacherName</small>
+                        }
+                    </p>
+                    <p class="text-secondary">
+                        @if (!string.IsNullOrEmpty(discipline.Description))
+                        {
+                            @discipline.Description.Substring(0, Math.Min(100, discipline.Description.Length))
+                            <span>...</span>
+                        }
+                    </p>
+                    <a asp-page="Tests" asp-route-disciplineId="@discipline.Id" class="btn btn-primary mt-2">
+                        📝 Перейти к тестам
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info text-center">
+        <h4>📚 У вас пока нет дисциплин</h4>
+        <p>Обратитесь к администратору для назначения дисциплин.</p>
+    </div>
+}

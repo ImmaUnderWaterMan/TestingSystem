@@ -1,0 +1,163 @@
+﻿@page "{testId:int}"
+@model TestingSystem.Pages.Student.TakeTestModel
+@{
+    Layout = null;
+    ViewData["Title"] = $"Тест: {Model.Test?.Title}";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+            body {
+                background: var(--bg-primary);
+                color: var(--text-primary);
+                padding: 20px;
+            }
+
+            .question-card {
+                background: var(--bg-card);
+                border: 1px solid rgba(233, 69, 96, 0.2);
+                border-radius: 12px;
+                padding: 25px;
+                margin-bottom: 20px;
+            }
+
+            .timer {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--bg-card);
+                padding: 15px 25px;
+                border-radius: 10px;
+                font-size: 24px;
+                font-weight: bold;
+                color: var(--accent-primary);
+                box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+                z-index: 1000;
+            }
+
+                .timer.warning {
+                    color: var(--warning);
+                }
+
+                .timer.danger {
+                    color: var(--danger);
+                    animation: pulse 1s infinite;
+                }
+
+            @@keyframes pulse {
+                0%, 100% {
+                    opacity: 1;
+                }
+
+                50% {
+                    opacity: 0.5;
+                }
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        @if (Model.Test.TimeLimitMinutes.HasValue)
+        {
+            <div class="timer" id="timer">
+                ⏱️ <span id="timeLeft">@Model.Test.TimeLimitMinutes.Value:00</span>
+            </div>
+        }
+
+        <h1 class="mb-4">@Model.Test.Title</h1>
+        <p class="text-secondary mb-4">@Model.Test.Description</p>
+
+        <form method="post" id="testForm">
+            <input type="hidden" name="testId" value="@Model.Test.Id" />
+
+            @foreach (var question in Model.Questions.Select((q, i) => new { q, i }))
+            {
+                <div class="question-card">
+                    <h5>
+                        <span class="badge bg-primary me-2">Вопрос @(question.i + 1)</span>
+                        @question.q.Text
+                        <small class="text-secondary ms-2">(@question.q.Points балл.)</small>
+                    </h5>
+
+                    @if (question.q.QuestionType == 0) // Один ответ
+                    {
+                        @foreach (var answer in question.q.Answers)
+                        {
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio"
+                                       name="answers[@question.q.Id]"
+                                       value="@answer.Id"
+                                       id="q@(question.q.Id)_a@(answer.Id)" />
+                                <label class="form-check-label" for="q@(question.q.Id)_a@(answer.Id)">
+                                    @answer.Text
+                                </label>
+                            </div>
+                        }
+                    }
+                    else if (question.q.QuestionType == 1) // Несколько ответов
+                    {
+                        @foreach (var answer in question.q.Answers)
+                        {
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox"
+                                       name="answers[@question.q.Id]"
+                                       value="@answer.Id"
+                                       id="q@(question.q.Id)_a@(answer.Id)" />
+                                <label class="form-check-label" for="q@(question.q.Id)_a@(answer.Id)">
+                                    @answer.Text
+                                </label>
+                            </div>
+                        }
+                    }
+                    else // Текстовый ответ
+                    {
+                        <textarea name="textAnswers[@question.q.Id]" class="form-control" rows="3"
+                                  placeholder="Введите ваш ответ..."></textarea>
+                    }
+                </div>
+            }
+
+            <div class="text-center mt-4 mb-5">
+                <button type="submit" class="btn btn-primary btn-lg px-5">
+                    ✅ Завершить тест
+                </button>
+            </div>
+        </form>
+    </div>
+
+    @if (Model.Test.TimeLimitMinutes.HasValue)
+    {
+        <script>
+                let timeLeft = @Model.Test.TimeLimitMinutes.Value * 60;
+                const timerElement = document.getElementById('timeLeft');
+                const timerBox = document.getElementById('timer');
+
+                const timer = setInterval(() => {
+                    timeLeft--;
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = timeLeft % 60;
+                    timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                    if (timeLeft <= 60) {
+                        timerBox.classList.add('danger');
+                    } else if (timeLeft <= 300) {
+                        timerBox.classList.add('warning');
+                    }
+
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        alert('Время вышло! Тест будет отправлен автоматически.');
+                        document.getElementById('testForm').submit();
+                    }
+                }, 1000);
+        </script>
+    }
+</body>
+</html>

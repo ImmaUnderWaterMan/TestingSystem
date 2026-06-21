@@ -1,0 +1,38 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: testing_db
+    entrypoint: /bin/bash /entrypoint.sh
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong@Passw0rd
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+      - ./Database:/docker-entrypoint-initdb.d
+      - ./entrypoint.sh:/entrypoint.sh
+    networks:
+      - testing_network
+
+  web:
+    build: ./TestingSystem    
+    container_name: testing_web
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=TestingSystem;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True
+    ports:
+      - "8080:80"
+      - "8081:443"
+    depends_on:
+      - sqlserver
+    networks:
+      - testing_network
+
+volumes:
+  sqlserver_data:
+
+networks:
+  testing_network:
+    driver: bridge

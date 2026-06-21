@@ -1,0 +1,456 @@
+/* ============================================
+   TESTING SYSTEM - Тёмная тема
+   ============================================ */
+
+/* --- Основные цвета --- */
+:root {
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --bg-card: #0f3460;
+    --accent-primary: #e94560;
+    --accent-secondary: #533483;
+    --text-primary: #eaeaea;
+    --text-secondary: #b8b8b8;
+    --success: #00d9a3;
+    --warning: #ffc107;
+    --danger: #e94560;
+    --info: #00adb5;
+}
+
+/* --- Общие стили для body --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    min-height: 100vh;
+    color: var(--text-primary);
+}
+
+/* --- Стили для страниц авторизации --- */
+.auth-page {
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-card {
+    background: var(--bg-card);
+    border-radius: 15px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+    padding: 40px;
+    max-width: 450px;
+    width: 100%;
+    border: 1px solid rgba(233, 69, 96, 0.2);
+}
+
+    .auth-card h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+
+    .auth-card .form-label {
+        color: var(--text-secondary);
+        font-weight: 500;
+    }
+
+    .auth-card .form-control {
+        background: var(--bg-secondary);
+        border: 2px solid rgba(233, 69, 96, 0.3);
+        color: var(--text-primary);
+        border-radius: 8px;
+        padding: 12px;
+        transition: all 0.3s;
+    }
+
+        .auth-card .form-control:focus {
+            background: var(--bg-primary);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 0.2rem rgba(233, 69, 96, 0.25);
+            color: var(--text-primary);
+        }
+
+        .auth-card .form-control::placeholder {
+            color: var(--text-secondary);
+        }
+
+    .auth-card .form-check-label {
+        color: var(--text-secondary);
+    }
+
+    .auth-card .btn-primary-custom {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+        border: none;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+    }
+
+        .auth-card .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(233, 69, 96, 0.6);
+        }
+
+    .auth-card .btn-danger-custom {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, var(--danger) 0%, #c23a51 100%);
+        border: none;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+    }
+
+        .auth-card .btn-danger-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(233, 69, 96, 0.6);
+        }
+
+    .auth-card .btn-secondary-custom {
+        width: 100%;
+        padding: 14px;
+        background: var(--bg-secondary);
+        border: 2px solid var(--text-secondary);
+        color: var(--text-primary);
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: all 0.3s;
+    }
+
+        .auth-card .btn-secondary-custom:hover {
+            background: var(--bg-primary);
+            border-color: var(--text-primary);
+        }
+
+.auth-icon {
+    font-size: 64px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* --- Навигация --- */
+.navbar {
+    background: var(--bg-card) !important;
+    border-bottom: 2px solid rgba(233, 69, 96, 0.3);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.4rem;
+    color: var(--accent-primary) !important;
+}
+
+.navbar .nav-link {
+    color: var(--text-secondary) !important;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+    .navbar .nav-link:hover {
+        color: var(--accent-primary) !important;
+    }
+
+.navbar .dropdown-menu {
+    background: var(--bg-card);
+    border: 1px solid rgba(233, 69, 96, 0.3);
+}
+
+.navbar .dropdown-item {
+    color: var(--text-primary);
+}
+
+    .navbar .dropdown-item:hover {
+        background: var(--bg-secondary);
+        color: var(--accent-primary);
+    }
+
+.navbar .dropdown-divider {
+    border-color: rgba(233, 69, 96, 0.3);
+}
+
+/* --- Карточки --- */
+.card {
+    background: var(--bg-card);
+    border: 1px solid rgba(233, 69, 96, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    color: var(--text-primary);
+}
+
+.card-header {
+    background: var(--bg-secondary);
+    border-bottom: 2px solid rgba(233, 69, 96, 0.3);
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.card-body {
+    color: var(--text-primary);
+}
+
+.card-title {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* --- Таблицы --- */
+.table {
+    color: #000; /* Чёрный текст */
+    background: #fff; /* Белый фон */
+}
+
+    .table thead {
+        background: #f8f9fa; /* Светло-серый фон заголовка */
+        color: #333; /* Тёмный текст заголовка */
+    }
+
+        .table thead th {
+            border-bottom: 2px solid #dee2e6;
+            font-weight: 600;
+            color: #333;
+        }
+
+    .table tbody tr {
+        border-bottom: 1px solid #dee2e6;
+    }
+
+        .table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+    .table tbody td {
+        color: #000; /* Чёрный текст в ячейках */
+    }
+
+    .table td, .table th {
+        color: #000 !important; /* Принудительно чёрный */
+    }
+
+/* --- Кнопки --- */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+    border: none;
+    color: white;
+}
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent-primary) 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+    }
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success) 0%, #00b894 100%);
+    border: none;
+    color: white;
+}
+
+    .btn-success:hover {
+        background: linear-gradient(135deg, #00b894 0%, var(--success) 100%);
+        transform: translateY(-2px);
+    }
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--danger) 0%, #c23a51 100%);
+    border: none;
+    color: white;
+}
+
+    .btn-danger:hover {
+        background: linear-gradient(135deg, #c23a51 0%, var(--danger) 100%);
+        transform: translateY(-2px);
+    }
+
+.btn-outline-primary {
+    color: var(--accent-primary);
+    border-color: var(--accent-primary);
+}
+
+    .btn-outline-primary:hover {
+        background: var(--accent-primary);
+        color: white;
+    }
+
+.btn-outline-danger {
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+    .btn-outline-danger:hover {
+        background: var(--danger);
+        color: white;
+    }
+
+/* --- Бейджи --- */
+.badge {
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.badge-admin {
+    background: var(--danger);
+    color: white;
+}
+
+.badge-teacher {
+    background: var(--info);
+    color: white;
+}
+
+.badge-student {
+    background: var(--success);
+    color: white;
+}
+
+/* --- Alerts --- */
+.alert {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.alert-success {
+    background: rgba(0, 217, 163, 0.2);
+    color: var(--success);
+    border-left: 4px solid var(--success);
+}
+
+.alert-danger {
+    background: rgba(233, 69, 96, 0.2);
+    color: var(--danger);
+    border-left: 4px solid var(--danger);
+}
+
+.alert-info {
+    background: rgba(0, 173, 181, 0.2);
+    color: var(--info);
+    border-left: 4px solid var(--info);
+}
+
+.alert-warning {
+    background: rgba(255, 193, 7, 0.2);
+    color: var(--warning);
+    border-left: 4px solid var(--warning);
+}
+
+/* --- Формы --- */
+.form-select {
+    background: var(--bg-secondary);
+    border: 2px solid rgba(233, 69, 96, 0.3);
+    color: var(--text-primary);
+    border-radius: 8px;
+}
+
+    .form-select:focus {
+        background: var(--bg-primary);
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 0 0.2rem rgba(233, 69, 96, 0.25);
+        color: var(--text-primary);
+    }
+
+/* --- Footer --- */
+.footer {
+    margin-top: auto;
+    padding: 25px 0;
+    border-top: 2px solid rgba(233, 69, 96, 0.3);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+}
+
+    .footer a {
+        color: var(--accent-primary);
+    }
+
+/* --- Заголовки --- */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* --- Ссылки --- */
+a {
+    color: var(--accent-primary);
+}
+
+    a:hover {
+        color: var(--info);
+    }
+
+/* --- Dashboard карточки --- */
+.dashboard-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(233, 69, 96, 0.2);
+    border-radius: 12px;
+    padding: 25px;
+    transition: all 0.3s;
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3);
+        border-color: var(--accent-primary);
+    }
+
+/* --- Адаптивность --- */
+@media (max-width: 768px) {
+    .auth-card {
+        margin: 20px;
+        padding: 25px;
+    }
+
+    .navbar-collapse {
+        background: var(--bg-card);
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+}
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-primary);
+    border-radius: 5px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--accent-secondary);
+    }
+
+/* --- Selection --- */
+::selection {
+    background: var(--accent-primary);
+    color: white;
+}

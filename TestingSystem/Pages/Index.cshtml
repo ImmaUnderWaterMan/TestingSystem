@@ -1,0 +1,100 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<div class="text-center mb-5">
+    <h1 class="display-4">Добро пожаловать в TestingSystem!</h1>
+    <p class="lead text-secondary">Современная система проведения тестирования</p>
+</div>
+
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <div class="alert alert-success text-center mb-4">
+        <h4>👤 Вы вошли как: <strong>@User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value</strong></h4>
+        <p class="mb-0">
+            Роль: <span class="badge badge-@(User.IsInRole("Admin") ? "admin" : User.IsInRole("Teacher") ? "teacher" : "student")">
+            @User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value
+        </span>
+    </p>
+</div>
+
+<div class="row mt-4">
+    @if (User.IsInRole("Student"))
+    {
+        <div class="col-md-6 mb-3">
+            <div class="dashboard-card text-center h-100">
+                <div class="mb-3" style="font-size: 48px;">📚</div>
+                <h5>Мои дисциплины</h5>
+                <p class="text-secondary">Просмотр доступных дисциплин и тестов</p>
+                <a href="/Student/Index" class="btn btn-primary mt-2">Перейти</a>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="dashboard-card text-center h-100">
+                <div class="mb-3" style="font-size: 48px;">📊</div>
+                <h5>Результаты</h5>
+                <p class="text-secondary">Просмотр результатов тестирования</p>
+                <a href="/Student/Results" class="btn btn-primary mt-2">Перейти</a>
+            </div>
+        </div>
+    }
+    else if (User.IsInRole("Admin"))
+    {
+        <div class="col-md-4 mb-3">
+            <div class="dashboard-card text-center h-100">
+                <div class="mb-3" style="font-size: 48px;">👥</div>
+                <h5>Пользователи</h5>
+                <p class="text-secondary">Управление пользователями системы</p>
+                <a href="/Admin/Users/Index" class="btn btn-primary mt-2">Перейти</a>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="dashboard-card text-center h-100">
+                <div class="mb-3" style="font-size: 48px;">📚</div>
+                <h5>Дисциплины</h5>
+                <p class="text-secondary">Управление дисциплинами</p>
+                <a href="/Admin/Disciplines/Index" class="btn btn-primary mt-2">Перейти</a>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="dashboard-card text-center h-100">
+                <div class="mb-3" style="font-size: 48px;">📊</div>
+                <h5>Результаты</h5>
+                <p class="text-secondary">Просмотр результатов тестирования</p>
+                <a href="/Admin/Results" class="btn btn-primary mt-2">Перейти</a>
+            </div>
+        </div>
+    }
+    else if (User.IsInRole("Teacher"))
+    {
+        <div class="col-md-6 mb-3">
+            <div class="dashboard-card text-center h-100">
+                <div class="mb-3" style="font-size: 48px;">📚</div>
+                <h5>Мои дисциплины</h5>
+                <p class="text-secondary">Управление своими дисциплинами</p>
+                <a href="/Teacher/Disciplines" class="btn btn-primary mt-2">Перейти</a>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="dashboard-card text-center h-100">
+                <div class="mb-3" style="font-size: 48px;">📊</div>
+                <h5>Результаты студентов</h5>
+                <p class="text-secondary">Просмотр результатов тестирования</p>
+                <a href="/Teacher/Results" class="btn btn-primary mt-2">Перейти</a>
+            </div>
+        </div>
+    }
+</div>
+}
+else
+{
+    <div class="text-center mt-5">
+        <div class="mb-4" style="font-size: 80px;">🔐</div>
+        <a href="/Auth/Login" class="btn btn-primary btn-lg">
+            Войти в систему
+        </a>
+        <p class="mt-3 text-secondary">Используйте логин: <strong>admin</strong> и пароль: <strong>admin123</strong></p>
+    </div>
+}

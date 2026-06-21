@@ -1,0 +1,42 @@
+cat > .gitignore << 'EOF'
+# Артефакты сборки
+bin/
+obj/
+build/
+publish/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.cache
+*.userprefs
+
+# Rider
+.idea/
+
+# Docker volumes
+*.mdf
+*.ldf
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Env
+.env
+*.env.local
+
+# Logs
+logs/
+*.log
+
+# NuGet
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+
+# Publish
+*.pubxml
+EOF

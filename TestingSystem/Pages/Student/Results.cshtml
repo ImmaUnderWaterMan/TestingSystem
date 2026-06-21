@@ -1,0 +1,82 @@
+﻿@page
+@model TestingSystem.Pages.Student.ResultsModel
+@{
+    ViewData["Title"] = "Мои результаты";
+}
+
+<h1 class="mb-4"> Мои результаты</h1>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-@(Model.MessageType) alert-dismissible fade show">
+        @Model.Message
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (Model.Results.Any())
+{
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Тест</th>
+                        <th>Дисциплина</th>
+                        <th>Результат</th>
+                        <th>Процент</th>
+                        <th>Статус</th>
+                        <th>Дата</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var result in Model.Results)
+                    {
+                        <tr>
+                            <td><strong>@result.TestTitle</strong></td>
+                            <td>@result.DisciplineName</td>
+                            <td>@result.Score / @result.TotalPoints</td>
+                            <td>
+                                <div class="progress" style="width: 100px;">
+                                    <div class="progress-bar bg-@(result.IsPassed ? "success" : "danger")"
+                                         style="width: @result.Percentage%">
+                                        @result.Percentage%
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                @if (result.IsPassed)
+                                {
+                                    <span class="badge badge-student">✅ Сдан</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-admin">❌ Не сдан</span>
+                                }
+                            </td>
+                            <td>@result.CompletedAt?.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>
+                                <a asp-page="Result" asp-route-resultId="@result.Id" class="btn btn-sm btn-outline-primary">
+                                    📋 Подробнее
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-info text-center">
+        <h4>📊 У вас пока нет результатов</h4>
+        <p>Пройдите тесты, чтобы увидеть свои результаты здесь.</p>
+        <a href="/Student/Index" class="btn btn-primary mt-2">Перейти к дисциплинам</a>
+    </div>
+}
+
+<div class="mt-3">
+    <a asp-page="/Index" class="btn btn-secondary">← На главную</a>
+</div>

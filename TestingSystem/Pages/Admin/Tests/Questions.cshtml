@@ -1,0 +1,140 @@
+﻿@page "{testId:int}"
+@model TestingSystem.Pages.Admin.Tests.QuestionsModel
+@{
+    ViewData["Title"] = $"Вопросы: {Model.Test?.Title}";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1>❓ Вопросы теста</h1>
+        <h4 class="text-secondary">@Model.Test?.Title</h4>
+        <small>Дисциплина: @Model.Test?.DisciplineName</small>
+    </div>
+    <a asp-page="Index" asp-route-disciplineId="@Model.Test?.DisciplineId" class="btn btn-secondary">← Назад к тестам</a>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-@(Model.MessageType) alert-dismissible fade show">
+        @Model.Message
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<!-- Форма добавления нового вопроса -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">➕ Добавить новый вопрос</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-page-handler="AddQuestion">
+            <input type="hidden" name="testId" value="@Model.Test.Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="mb-3">
+                <label asp-for="NewQuestion.Text" class="form-label"></label>
+                <textarea asp-for="NewQuestion.Text" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="NewQuestion.Text" class="text-danger"></span>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="NewQuestion.QuestionType" class="form-label"></label>
+                    <select asp-for="NewQuestion.QuestionType" class="form-select">
+                        <option value="0">Один правильный ответ</option>
+                        <option value="1">Несколько правильных ответов</option>
+                        <option value="2">Текстовый ответ (вручную)</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="NewQuestion.Points" class="form-label"></label>
+                    <input asp-for="NewQuestion.Points" class="form-control" type="number" />
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Добавить вопрос</button>
+        </form>
+    </div>
+</div>
+
+<!-- Список вопросов -->
+@foreach (var question in Model.Questions)
+{
+    <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <strong>Вопрос @question.OrderNumber:</strong> @question.Text
+                <span class="badge bg-info ms-2">@question.Points балл(ов)</span>
+                <span class="badge bg-secondary ms-2">
+                    Тип: @(question.QuestionType == 0 ? "Один ответ" : question.QuestionType == 1 ? "Несколько ответов" : "Текст")
+                </span>
+            </div>
+            <form method="post" asp-page-handler="DeleteQuestion" class="d-inline">
+                <input type="hidden" name="questionId" value="@question.Id" />
+                <input type="hidden" name="testId" value="@Model.Test.Id" />
+                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Удалить вопрос и все его ответы?');">🗑️ Удалить</button>
+            </form>
+        </div>
+        <div class="card-body">
+            <h6>Варианты ответов:</h6>
+            
+            @if (question.Answers.Any())
+            {
+                <ul class="list-group mb-3">
+                    @foreach (var answer in question.Answers)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                @if (answer.IsCorrect) { <span class="text-success fw-bold">✅</span> }
+                                @answer.Text
+                            </div>
+                            <form method="post" asp-page-handler="DeleteAnswer" class="d-inline">
+                                <input type="hidden" name="answerId" value="@answer.Id" />
+                                <input type="hidden" name="questionId" value="@question.Id" />
+                                <input type="hidden" name="testId" value="@Model.Test.Id" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger">✕</button>
+                            </form>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">Нет вариантов ответа</p>
+            }
+
+            <!-- Форма добавления ответа -->
+            @if (question.QuestionType != 2) 
+            {
+                <form method="post" asp-page-handler="AddAnswer" class="row g-2">
+                    <input type="hidden" name="questionId" value="@question.Id" />
+                    <input type="hidden" name="testId" value="@Model.Test.Id" />
+                    <div class="col-md-8">
+                        <input type="text" name="answerText" class="form-control" placeholder="Текст варианта ответа" required />
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox"
+                                   name="isCorrect"
+                                   value="true"
+                                   id="correct_@question.Id" />
+                            <label class="form-check-label" for="correct_@question.Id">
+                                Правильный
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-sm btn-success w-100">+ Ответ</button>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+}
+
+@if (!Model.Questions.Any())
+{
+    <div class="text-center text-secondary py-4">
+        <p>Вопросы ещё не добавлены. Используйте форму выше.</p>
+    </div>
+}

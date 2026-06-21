@@ -1,0 +1,103 @@
+﻿@page "{disciplineId:int}"
+@model TestingSystem.Pages.Admin.Tests.IndexModel
+@{
+    ViewData["Title"] = $"Тесты: {Model.Discipline?.Name}";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1>📝 Тесты дисциплины</h1>
+        <h4 class="text-secondary">@Model.Discipline?.Name</h4>
+    </div>
+    <div>
+        <a asp-page="/Admin/Disciplines/Index" class="btn btn-secondary">← Назад к дисциплинам</a>
+        <a asp-page="Create" asp-route-disciplineId="@Model.DisciplineId" class="btn btn-success">+ Добавить тест</a>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-@(Model.MessageType) alert-dismissible fade show">
+        @Model.Message
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card">
+    <div class="card-body">
+        @if (Model.Tests.Any())
+        {
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Название</th>
+                        <th>Описание</th>
+                        <th>Время (мин)</th>
+                        <th>Проходной балл</th>
+                        <th>Вопросов</th>
+                        <th>Статус</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var test in Model.Tests)
+                    {
+                        <tr>
+                            <td>@test.Id</td>
+                            <td><strong>@test.Title</strong></td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(test.Description))
+                                {
+                                    <small class="text-secondary">@test.Description.Substring(0, Math.Min(50, test.Description.Length))...</small>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </td>
+                            <td>@(test.TimeLimitMinutes?.ToString() ?? "∞")</td>
+                            <td>@test.PassingScore%</td>
+                            <td>
+                                <a asp-page="Questions" asp-route-testId="@test.Id" class="btn btn-sm btn-info">
+                                    ❓ @Model.QuestionsCount.GetValueOrDefault(test.Id, 0)
+                                </a>
+                            </td>
+                            <td>
+                                @if (test.IsPublished)
+                                {
+                                    <span class="badge badge-student">Опубликован</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-admin">Черновик</span>
+                                }
+                            </td>
+                            <td>
+                                <form method="post" asp-page-handler="TogglePublish" class="d-inline">
+                                    <input type="hidden" name="testId" value="@test.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-warning">
+                                        @(test.IsPublished ? " Скрыть" : " Опубликовать")
+                                    </button>
+                                </form>
+                                <a asp-page="Edit" asp-route-id="@test.Id" class="btn btn-sm btn-outline-primary">
+                                    ✏️ Изменить
+                                </a>
+                                <a asp-page="Delete" asp-route-id="@test.Id" class="btn btn-sm btn-outline-danger">
+                                    🗑️ Удалить
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="text-center text-secondary py-4">
+                <div style="font-size: 48px;">📝</div>
+                <p>Тесты ещё не созданы</p>
+            </div>
+        }
+    </div>
+</div>

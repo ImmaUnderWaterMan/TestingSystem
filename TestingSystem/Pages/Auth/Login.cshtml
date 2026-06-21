@@ -1,0 +1,49 @@
+﻿@page
+@model TestingSystem.Pages.Auth.LoginModel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Вход в систему";
+}
+
+<h2> TestingSystem</h2>
+<h4 class="text-center mb-4">Вход в систему</h4>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.ErrorMessage
+    </div>
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-@(TempData["MessageType"]?.ToString() ?? "info")" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Input.Login" class="form-label"></label>
+        <input asp-for="Input.Login" class="form-control" placeholder="Введите логин" />
+        <span asp-validation-for="Input.Login" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Password" class="form-label"></label>
+        <input asp-for="Input.Password" class="form-control" placeholder="Введите пароль" />
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="Input.RememberMe" class="form-check-input" />
+        <label asp-for="Input.RememberMe" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn-primary-custom">Войти</button>
+</form>
+
+<div class="text-center mt-3 text-muted">
+    <small>Тестовый аккаунт: admin / admin123</small>
+</div>

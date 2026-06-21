@@ -1,0 +1,44 @@
+﻿@page "{id:int}"
+@model TestingSystem.Pages.Admin.Tests.DeleteModel
+@{
+    ViewData["Title"] = "Удаление теста";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h1 class="mb-4">🗑️ Удаление теста</h1>
+
+        <div class="card border-danger">
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    <strong>Внимание!</strong> Вы собираетесь удалить тест. Все вопросы, ответы и результаты будут также удалены.
+                </div>
+
+                <dl class="row">
+                    <dt class="col-sm-4">ID:</dt>
+                    <dd class="col-sm-8">@Model.Test.Id</dd>
+
+                    <dt class="col-sm-4">Название:</dt>
+                    <dd class="col-sm-8">@Model.Test.Title</dd>
+
+                    <dt class="col-sm-4">Дисциплина:</dt>
+                    <dd class="col-sm-8">@Model.DisciplineName</dd>
+
+                    <dt class="col-sm-4">Вопросов:</dt>
+                    <dd class="col-sm-8">@Model.QuestionsCount</dd>
+
+                    <dt class="col-sm-4">Проходной балл:</dt>
+                    <dd class="col-sm-8">@Model.Test.PassingScore%</dd>
+                </dl>
+
+                <form method="post">
+                    <input type="hidden" name="id" value="@Model.Test.Id" />
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger">🗑️ Да, удалить</button>
+                        <a asp-page="Index" asp-route-disciplineId="@Model.Test.DisciplineId" class="btn btn-secondary">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
